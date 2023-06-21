@@ -44,7 +44,6 @@ def hand_recogtion(lm):
     else:
         return -1
 
-
 os.chdir(directory)
 
 kb = Controller()
@@ -55,6 +54,9 @@ hands = mp.solutions.hands
 hands_mesh = hands.Hands(static_image_mode=True, min_detection_confidence=0.7)
 draw = mp.solutions.drawing_utils
 # frm = cv2.imread("hands.jpg")break
+
+loop = 20
+
 while True:
     _, frm = cap.read()
     rgb = cv2.cvtColor(frm, cv2.COLOR_BGR2RGB)
@@ -63,24 +65,29 @@ while True:
 
     if op.multi_hand_landmarks:
         for i in op.multi_hand_landmarks:
-            checker = hand_recogtion(i)
-            print(checker)
-            # if checker == 0:
-            #     kb.press(Key.up)
-            # else:
-            #     kb.release(Key.up)
-            # if checker == 1:
-            #     kb.press(Key.down)
-            # else:
-            #     kb.release(Key.down)
-            # if checker == 2:
-            #     kb.press(Key.left)
-            # else:
-            #     kb.release(Key.left)
-            # if checker == 3:
-            #     kb.press(Key.right)
-            # else:
-            #     kb.release(Key.right)
+            if loop != 0:
+                loop = loop - 1
+                print(loop)
+            else: 
+                loop = 10
+                checker = hand_recogtion(i)
+                print(checker)
+                if checker == 0:
+                    kb.press(Key.up)
+                else:
+                    kb.release(Key.up)
+                if checker == 1:
+                    kb.press(Key.down)
+                else:
+                    kb.release(Key.down)
+                if checker == 2:
+                    kb.press(Key.left)
+                else:
+                    kb.release(Key.left)
+                if checker == 3:
+                    kb.press(Key.right)
+                else:
+                    kb.release(Key.right)
             draw.draw_landmarks(frm, i, hands.HAND_CONNECTIONS,
                                 landmark_drawing_spec=draw.DrawingSpec(
                                     color=(255, 0, 0), circle_radius=4, thickness=3),
